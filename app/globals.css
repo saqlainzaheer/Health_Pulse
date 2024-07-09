@@ -64,13 +64,49 @@
       --input: 217.2 32.6% 17.5%;
       --ring: 212.7 26.8% 83.9%;
     }
+    
   }
 
   @layer base {
     * {
       @apply border-border;
     }
+    
     body {
       @apply bg-background text-foreground;
     }
+    .input-phone {
+    @apply mt-2 h-11 rounded-md px-3 text-sm border bg-background placeholder:bg-ring border-border !important;
   }
+
+
+
+}
+
+  .PhoneInputCountrySelect{
+     background:#020817 ;
+     
+
+  }
+  .PhoneInputCountrySelect::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  background-color: #333; /* Color of the scrollbar track */
+}
+
+.PhoneInputCountrySelect::-webkit-scrollbar-thumb {
+  background-color: #666; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners of the scrollbar thumb */
+}
+ .PhoneInputInput {
+  outline: none;
+  margin-left: 4px;
+  background: var(--background);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.PhoneInputInput::placeholder {
+  color: #94a3b8;
+  font-size:12px;
+  
+}
