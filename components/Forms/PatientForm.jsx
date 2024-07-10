@@ -7,6 +7,8 @@ import {
 import { Button } from "@/components/ui/button"
 import CustomFormField from "../global/CustomFormField"
 import { useRouter } from 'next/navigation'
+import { createUser } from "@/lib/actions/patient.actions"
+
 
 
 const FormSchema = z.object({
@@ -16,7 +18,10 @@ const FormSchema = z.object({
     email: z
         .string()
         .min(1, { message: "This field has to be filled." })
-        .email("This is not a valid email."),
+    .email("This is not a valid email."),
+    phone: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number")
    
 
 })
@@ -28,13 +33,21 @@ export function PatientForm() {
         defaultValues: {
             username: "",
             email: "", 
+            Phone:"2"
         },
     });
 
-  function onSubmit(data) {
-      console.log(data)
-      router.push("/patient")
-  }
+ const onSubmit = async (data) => {
+   console.log(data);
+
+    try {
+        const result = await createUser(data);
+        console.log('User created:', result);
+        router.push("/patient"); // Navigate to the "/patient" route
+    } catch (e) {
+        console.error('Error creating user:', e.message);
+    }
+};
 
   return (
     <Form {...form}>
