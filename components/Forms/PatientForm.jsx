@@ -37,13 +37,20 @@ export function PatientForm() {
         },
     });
 
- const onSubmit = async (data) => {
-   console.log(data);
+ const onSubmit = async (values) => {
 
-    try {
-        const result = await createUser(data);
-        console.log('User created:', result);
-        router.push("/patient"); // Navigate to the "/patient" route
+     try {
+      const user = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+      };
+
+      const newUser = await createUser(user);
+
+      if (newUser) {
+        router.push(`/patient/${newUser.$id}/register`);
+      }
     } catch (e) {
         console.error('Error creating user:', e.message);
     }
@@ -57,7 +64,6 @@ export function PatientForm() {
                   name="username"
                   label="User Name"
                   placeholder="Jhon doe"
-               
                   iconSrc="/assets/icons/user.svg"
                   iconAlt="User Icon"
               />

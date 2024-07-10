@@ -1,6 +1,7 @@
 // eslint-disable-next-line camelcase
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import "./globals.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 const PlusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
