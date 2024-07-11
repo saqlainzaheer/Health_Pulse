@@ -2,202 +2,216 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import Image from "next/image"
 import {
-    Form,
+  Form,
 } from "@/components/ui/form"
 import CustomFormField from "../global/CustomFormField"
 import { createUser } from "@/lib/actions/patient.actions"
-import { FormFieldType, registerFormValidation, rigesterFormDefaultValues } from "@/components/Forms/FormSchema"
+import { Doctors, FormFieldType, registerFormValidation, rigesterFormDefaultValues } from "@/components/Forms/FormSchema"
+import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group"
+import { Label } from "@radix-ui/react-label"
+import { SelectItem } from "@radix-ui/react-select"
 
 export function RegisterForm({ user }) {
 
 
-    const form = useForm({
-        resolver: zodResolver(registerFormValidation),
-        defaultValues: {
-            ...rigesterFormDefaultValues, 
-            name: user.name, 
-            email: user.email, 
-            phone: user.phone, 
-        },
-    });
+  const form = useForm({
+    resolver: zodResolver(registerFormValidation),
+    defaultValues: {
+      ...rigesterFormDefaultValues,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+    },
+  });
 
-    const onSubmit = async (values) => {
+  const onSubmit = async (values) => {
 
-        try {
-            const user = {
-                name: values.name,
-                email: values.email,
-                phone: values.phone,
-            };
+    try {
+      const user = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+      };
 
-            const newUser = await createUser(user);
+      const newUser = await createUser(user);
 
-            console.log(newUser);
-        } catch (e) {
-            console.error('Error creating user:', e.message);
-        }
-    };
+      console.log(newUser);
+    } catch (e) {
+      console.error('Error creating user:', e.message);
+    }
+  };
 
-    return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex-1 space-y-12"
-            >
-                <section className="space-y-4">
-                    <h1 className="header">Welcome 👋</h1>
-                    <p className="text-dark-700">Let us know more about yourself.</p>
-                </section>
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex-1 space-y-12"
+      >
+        <section className="space-y-4">
+          <h1 className="header">Welcome 👋</h1>
+          <p className="text-dark-700">Let us know more about yourself.</p>
+        </section>
 
-                <section className="space-y-6">
-                    <div className="mb-9 space-y-1">
-                        <h2 className="sub-header">Personal Information</h2>
-                    </div>
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">Personal Information</h2>
+          </div>
 
-                    {/* NAME */}
+          {/* NAME */}
 
-                    <CustomFormField
-                        fieldType={FormFieldType.INPUT}
-                        form={form}
-                        name="name"
-                        disable="true"
-                        placeholder="John Doe"
-                        iconSrc="/assets/icons/user.svg"
-                        iconAlt="user"
-                    />
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            form={form}
+            name="name"
+            // disable={true}
+            placeholder="John Doe"
+            iconSrc="/assets/icons/user.svg"
+            iconAlt="user"
+          />
 
-                    {/* EMAIL & PHONE */}
-                    <div className="flex flex-col gap-6 xl:flex-row">
-                        <div className="w-1/2">
+          {/* EMAIL & PHONE */}
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <div className="w-1/2">
 
-                        <CustomFormField
-                            fieldType={FormFieldType.INPUT}
+              <CustomFormField
+                fieldType={FormFieldType.INPUT}
+                form={form}
+                name="email"
+                // disable={true}
+                label="Email address"
+                placeholder="johndoe@gmail.com"
+                iconSrc="/assets/icons/email.svg"
+                iconAlt="email"
+              />
+            </div>
+            <div className="w-1/2">
+
+              <CustomFormField
+                fieldType={FormFieldType.PHONE}
+                form={form}
+                name="phone"
+                // disabel={true}
+                label="Phone Number"
+                placeholder="(555) 123-4567"
+              />
+            </div>
+
+          </div>
+
+          {/* BirthDate & Gender */}
+
+
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <div className="w-1/2">
+
+              <CustomFormField
+                fieldType={FormFieldType.DATE_PICKER}
+                form={form}
+                name="birthDate"
+                // disable="true"
+                label="DOB"
+                iconSrc="/assets/icons/calendar.svg"
+                iconAlt="Dob"
+              />
+            </div>
+            <div className="w-1/2">
+              {/* <CustomFormField
+                            fieldType={FormFieldType.SKELETON}
                             form={form}
-                            name="email"
-                            disable="true"
-                            label="Email address"
-                            placeholder="johndoe@gmail.com"
-                            iconSrc="/assets/icons/email.svg"
-                            iconAlt="email"
-                        />
-                        </div>
-                        <div className="w-1/2">
+                            name="gender"
+                            label="Birth Date"
+                            // iconSrc="/assets/icons/calendar.svg"
+                            // iconAlt="Dob"
+                        /> */}
 
-                        <CustomFormField
-                            fieldType={FormFieldType.PHONE}
-                            form={form}
-                            name="phone"
-                            disabel="true"
-                            label="Phone Number"
-                            placeholder="(555) 123-4567"
-                            />
-                        </div>
-                            
-                    </div>
+              <CustomFormField
+                fieldType={FormFieldType.SKELETON}
+                form={form}
+                name="gender"
+                label="Gender"
+                renderSkeleton={(field) => (
 
-                    {/* BirthDate & Gender */}
-
-
-                     <div className="flex flex-col gap-6 xl:flex-row">
-                        <div className="w-1/2">
-
-                        <CustomFormField
-                            fieldType={FormFieldType.DATE_PICKER}
-                            form={form}
-                            name="birthDate"
-                            disable="true"
-                            label="DOB"
-                            iconSrc="/assets/icons/calendar.svg"
-                            iconAlt="email"
-                        />
-                        </div>
-                        <div className="w-1/2">
-
-                       
-                        </div>
-                            
-                    </div>
-                    {/* <div className="flex flex-col gap-6 xl:flex-row">
-            <CustomFormField
-              fieldType={FormFieldType.DATE_PICKER}
-              form={form}
-              name="birthDate"
-              label="Date of birth"
-            />
-
-            <CustomFormField
-              fieldType={FormFieldType.SKELETON}
-              form={form}
-              name="gender"
-              label="Gender"
-              renderSkeleton={(field) => (
-                <FormControl>
                   <RadioGroup
                     className="flex h-11 gap-6 xl:justify-between"
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    {GenderOptions.map((option, i) => (
+                    {['male', 'female', 'other'].map((option, i) => (
                       <div key={option + i} className="radio-group">
-                        <RadioGroupItem value={option} id={option} />
+                        <RadioGroupItem value={option} id={option} className="radio-button" />
                         <Label htmlFor={option} className="cursor-pointer">
                           {option}
                         </Label>
                       </div>
                     ))}
                   </RadioGroup>
-                </FormControl>
-              )}
-            />
-          </div> */}
 
-                    {/* Address & Occupation */}
-                    {/* <div className="flex flex-col gap-6 xl:flex-row">
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              form={form}
-              name="address"
-              label="Address"
-              placeholder="14 street, New york, NY - 5101"
-            />
+                )}
+              />
+            </div>
 
-            <CustomFormField
-              fieldType={FormFieldType.INPUT}
-              form={form}
-              name="occupation"
-              label="Occupation"
-              placeholder=" Software Engineer"
-            />
-          </div> */}
+          </div>
 
-                    {/* Emergency Contact Name & Emergency Contact Number */}
-                    {/* <div className="flex flex-col gap-6 xl:flex-row">
+
+          {/* Address & Occupation */}
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <div className="w-1/2">
+
+              <CustomFormField
+                fieldType={FormFieldType.INPUT}
+                form={form}
+                name="address"
+                label="Address"
+                placeholder="14 street, Faisalbad,punjab"
+              />
+            </div>
+
+            <div className="w-1/2">
+              <CustomFormField
+                fieldType={FormFieldType.INPUT}
+                form={form}
+                name="occupation"
+                label="Occupation"
+                placeholder=" Software Engineer"
+              />
+            </div>
+          </div>
+
+          {/* Emergency Contact Name & Emergency Contact Number */}
+          <div className="flex flex-col gap-6 xl:flex-row">
+            <div className="w-1/2">
+
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               form={form}
               name="emergencyContactName"
               label="Emergency contact name"
               placeholder="Guardian's name"
-            />
-
+              />
+              </div>
+            <div className="w-1/2">
+              
             <CustomFormField
-              fieldType={FormFieldType.PHONE_INPUT}
+              fieldType={FormFieldType.PHONE}
               form={form}
               name="emergencyContactNumber"
               label="Emergency contact number"
               placeholder="(555) 123-4567"
-            /> */}
-                    {/* </div>
+              />
+              </div>
+          </div>
+          
         </section>
 
         <section className="space-y-6">
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Medical Information</h2>
-          </div> */}
+          </div>
 
-                    {/* PRIMARY CARE PHYSICIAN */}
-                    {/* <CustomFormField
+          {/* PRIMARY CARE PHYSICIAN */}
+          <CustomFormField
             fieldType={FormFieldType.SELECT}
             form={form}
             name="primaryPhysician"
@@ -218,10 +232,12 @@ export function RegisterForm({ user }) {
                 </div>
               </SelectItem>
             ))}
-          </CustomFormField> */}
+          </CustomFormField>
+          
 
-                    {/* INSURANCE & POLICY NUMBER */}
-                    {/* <div className="flex flex-col gap-6 xl:flex-row">
+         
+          {/* INSURANCE & POLICY NUMBER */}
+          {/* <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               form={form}
@@ -239,8 +255,8 @@ export function RegisterForm({ user }) {
             />
           </div> */}
 
-                    {/* ALLERGY & CURRENT MEDICATIONS */}
-                    {/* <div className="flex flex-col gap-6 xl:flex-row">
+          {/* ALLERGY & CURRENT MEDICATIONS */}
+          {/* <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
               form={form}
@@ -258,8 +274,8 @@ export function RegisterForm({ user }) {
             />
           </div> */}
 
-                    {/* FAMILY MEDICATION & PAST MEDICATIONS */}
-                    {/* <div className="flex flex-col gap-6 xl:flex-row">
+          {/* FAMILY MEDICATION & PAST MEDICATIONS */}
+          {/* <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
               form={form}
@@ -345,11 +361,11 @@ export function RegisterForm({ user }) {
             label="I acknowledge that I have reviewed and agree to the
             privacy policy"
           /> */}
-                </section>
+        </section>
 
-                {/* <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton> */}
-            </form>
-        </Form>
-    );
+        {/* <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton> */}
+      </form>
+    </Form>
+  );
 
 }

@@ -14,10 +14,14 @@ import { FormFieldType } from "../Forms/FormSchema";
 
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "@radix-ui/react-select";
+// import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
+// import { Label } from "@radix-ui/react-label";
+// import { Label } from "@radix-ui/react-label";
 // import { useState } from "react";
 
 function CustomFormField({
-  disable,
+ 
   form,
   name,
   label,
@@ -25,7 +29,9 @@ function CustomFormField({
   iconAlt,
   placeholder,
   description,
+  renderSkeleton,
   fieldType,
+  children
 }) {
   // const [value, setValue] = useState('');
   const renderField = (field) => {
@@ -36,61 +42,81 @@ function CustomFormField({
           onChange={field.onChange}
           international
           limitMaxLength
-          disable={disable}
+          // disable={disable}
           className="input-phone"
-          />
-          
-      case FormFieldType.INPUT :
+        />
+
+      case FormFieldType.INPUT:
         return (
           <div className="relative flex w-full items-center">
-          <Image
-            className="absolute mx-2"
-            src={iconSrc}
-            width={24}
-            height={24}
-            alt={iconAlt}
-          />
-          <Input className="pl-10" disabled={disable} placeholder={placeholder} {...field} />
+            {iconSrc &&
+            <Image
+              className="absolute mx-2"
+              src={iconSrc}
+              width={24}
+              height={24}
+              alt={iconAlt}
+            />}
+            <Input className={iconSrc?"pl-10":"" }  placeholder={placeholder} {...field} />
 
           </div>
         );
       case FormFieldType.DATE_PICKER:
         return (
           <div className="relative flex w-full items-center">
-          <Image
-            src="/assets/icons/calendar.svg"
-            height={24}
-            width={24}
-            alt="user"
-            className="absolute mx-2"
-          />
-          
+            <Image
+              src="/assets/icons/calendar.svg"
+              height={24}
+              width={24}
+              alt="user"
+              className="absolute mx-2"
+            />
+
             <ReactDatePicker
               selected={field.value}
               onChange={(date) => field.onChange(date)}
               timeInputLabel="Time:"
-              dateFormat= "MM/dd/yyyy"
+              dateFormat="MM/dd/yyyy"
               wrapperClassName="date-picker"
             />
-        
-        </div>
+
+          </div>
         );
+      case FormFieldType.SKELETON:
+        return renderSkeleton ? renderSkeleton(field) : null;
+      case FormFieldType.SELECT:
+        return (
+            
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <SelectTrigger
+              className="shad-select-trigger">
+                    <SelectValue placeholder={placeholder} />
+                  </SelectTrigger>
+                <SelectContent className="shad-select-content">
+                  {children}
+                </SelectContent>
+              </Select>
+           
+          );
+        
+        
       default:
         return (
           <div className="relative flex w-full items-center">
-          <Image
-            className="absolute mx-2"
-            src={iconSrc}
-            width={24}
-            height={24}
-            alt={iconAlt}
-          />
-          <Input className="pl-10" disabled={disable} placeholder={placeholder} {...field} />
+            <Image
+              className="absolute mx-2"
+              src={iconSrc}
+              width={24}
+              height={24}
+              alt={iconAlt}
+            />
+            <Input className="pl-10"  placeholder={placeholder} {...field} />
 
           </div>
         );
     }
   };
+  
 
   return (
     <FormField
